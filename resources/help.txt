@@ -1,0 +1,421 @@
+INIT=============================================
+AKDL is <b>Another (Amazing) Keyword Definition Language</b>.<br>
+It allows you to define and generate parsing and runtime code of any syntax you have to work on.<br>
+This <b>Visual AKDL Editor</b> helps you designing your syntax without having necessarily the constraint of learning the AKDL syntax itself before.
+=============================================INIT
+
+START============================================
+You get started if you select one of the following in the <b>Source</b> menu item:
+<ul>
+  <li>New...</li>
+  <li>Open</li>
+</ul>
+My advice: start with <b>open</b>.<br>
+Select then the given test definition file example called <b><i>regexp.def</i></b>.<br>
+You can, this way, easily get familiar with the tool.<br>
+Once your file is open, you will see a multiple-paneled screen. In the main panel, a tree appears. That's the area your syntax graph is shown.<br>
+Try to select a node in this tree and right-click on it.<br>
+A context menu will appear and, since it is intuitive, you will exactly know what to do further.<br><br>
+You will probably make some mistakes (like removing some nodes without knowing how to get them back).
+But if you don't overwrite the definition file by saving your work in it, nothing bad can happen.
+============================================START
+
+KEYS=============================================
+Selecting this option in the <b><i>Control Area</i></b> will give you a complete sorted list of your
+keywords. You get first all well defined ones, and then, if exist, the undefined and/or ignored ones.
+<br><b>Remark:</b> Ignored keywords are undefined keys turned to 'ignored' to allow you a code
+generation even though your whole syntax is not defined yet. 
+=============================================KEYS
+
+HEADER===========================================
+Click on this button to setup the following header information:
+<ul>
+  <li>Destination</li>
+  <li>Debug</li>
+  <li>Verbose</li>
+</ul>
+Defining <b><i>Destination</i></b> path is the most important field you have to fill.<br>
+The check boxes are obviously only used to get more debug information.<br><br>
+===========================================HEADER
+
+CODE=============================================
+    If <b><i>Destination</i></b> field (from the header information area) -- or <b><i>Path To Save Definitions</i></b> -- is set,
+     <b><i>generate code</i></b> button will be enabled and you can then click on it.<br>
+    Once you have done that, click on <b><i>go</i></b> to start parsing and runtime code
+    generation.<br>
+    You can then check at your destination path, what was generated.<br>
+    Of course, you want to use this generated code, so here is a snippet showing how you
+    instantiate it:<br><br>
+    Let's say you called your syntax main node <b><i>sql</i></b>, and you have defined a parsing class
+     <b><i>SqlParser</i></b> as well as a runtime class <b><i>MySql</i></b> (see in the <i>Properties
+     Area</i> how to do that), the following can then be made:<br><br>
+         <i>&emsp;SqlParser parser = new SqlParser(new BufferedReader(new InputStreamReader(is)));<br>
+&emsp;if (parser.parse() != Boolean.TRUE) {<br>
+  &emsp;&emsp;System.err.println("compilation ended with "+parser.getError());<br>
+  &emsp;&emsp;System.exit(-1);<br>
+&emsp;}<br>
+&emsp;MySql sql = parser.getMySql();</i>
+=============================================CODE
+
+DISPLAY==========================================
+This check box, if checked, will give you information in the <b><i>Properties Area</i></b> underneath of the
+path from the root node to the one you have selected in your <b><i>Syntax Graph Area</i></b>.
+==========================================DISPLAY
+
+SOURCE_OPTION====================================
+In the <b><i>Control Area</i></b> you have also the possibility to select the way your source will appear
+in the <b><i>Source</i></b> tab.<br>
+you can select between:<br>
+<ul>
+  <li>raw source</li>
+  <li>colored source</li>
+</ul>
+<b><i>Raw source</i></b> is just a simple plain text, whereas the <b><i>colored source</i></b> appears
+with keys colored according the their meaning (see menu <b><i>AKDL -> Color preferences...</i></b>).<br>
+<h3>Advanced Mode</h3>
+If you have a source defined as an enhancement of a previous version, one more choice appears in this area:<br>
+<ul>
+  <li>show source delta</li>
+  <li>show all</li>
+</ul>
+Even though you see the whole source in the tree area, you may want to see only what you added to the
+current version. Therefore, you can choose this option by selecting <b><i>show source delta</i></b>.<br>
+<br><b>Remark:</b> The rules, if you work in this enhancement mode are the following:<br>
+<i>you can only add new keywords to an <b>alternative</b> or new enum elements to an <b>enum</b> node</i>.
+====================================SOURCE_OPTION
+
+PROPS============================================
+As you select a node in the <b><i>Syntax Graph Area</i></b>, some corresponding attributes will be shown on
+the <b><i>Properties Area</i></b>.<br>
+You can adapt these properties to your convenient. For instance, you can rename a node here. It is also
+possible to give package and class names for both the Parsing and Runtime code that should be generated
+from your definition (default values are respectively <i>com.parse.</i> and <i>com.run.</i> for packages
+whereas classes are named with the node name).
+============================================PROPS
+
+NODES============================================
+In your tree (which is, in fact, a graph) you will distinguish between terminal nodes (leaves) and non-terminal
+ones (just nodes).<br>
+The main non-terminal node is a <b>keyword</b>. It has child nodes which represent its definition and may have
+a parent node, in which case, it is involved in the definition of the latter.<br>
+The other non-terminal nodes are groupings of symbols with or without an information about the way they
+appear in the definition. There we have 5 types of groupings - ways you can group your items (see <b><i>about AKDL syntax</i></b> item in the
+<b><i>Learn More...</i></b> section.<br>
+As terminal symbols, we have the following:<br>
+<ul>
+  <li>Char symbol</li>
+  <li>String symbol</li>
+  <li>Enum element</li>
+  <li>Predefined element</li>
+  <li>Parse Reference element</li>
+</ul>
+The first 3 are obvious; no need to explain.<br>
+For the <i>Predefined element</i>, you will discover the list of such as you choose to add one. Typically,
+it's an IDENTIFIER or a LITERAL, etc.<br>
+If you check the <i>Runtime Reference</i> box in the <b><i>Properties Area</i></b>, this Predefined
+element will be declared as Runtime Reference (meaning, this attribute will appear in the runtime code,
+with its getter and setter methods without being checked at parse time).
+And the last one is: <i>Parse Reference element</i>. You should add it if your parser needs to declare a
+reference to this element. That can happen, typically, if your symbol has to be declared as an enum element.<br>
+Two other quasi-terminal nodes exist:
+<ul>
+  <li>Keyword Reference</li>
+  <li>Omitted Keyword</li>
+</ul>
+The first one will be used by the <i><b>Visual AKDL Editor</b></i> automatically to avoid infinite loop as
+a keyword was already defined (this node just refers to the already defined one, and double-clicking on it
+will let you jump to this definition.<br>
+For the omitted keyword, it is just a convenient node used at design time if you want to check your code
+generation without having defined the whole syntax. Declaring the undefined as omitted (or ignored)
+will indicate the parser to go through without take them into account.
+============================================NODES
+
+ADD==============================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, td {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+    The context menu lets add following child nodes:<br><br>
+    <table>
+      <tr><td>keyword</td><td><b><i>non-terminal symbol which needs itself to be defined</i></b></td></tr>
+      <tr><td>predefined</td><td><b><i>terminal symbol out of the proposed list</i></b></td></tr>
+      <tr><td>operation</td><td><b><i>non-terminal symbol grouping and operating on further symbols</i></b></td></tr>
+      <tr><td>constant word</td><td><b><i>terminal symbol (character chain within double-quotes)</i></b></td></tr>
+      <tr><td>char symbol</td><td><b><i>terminal symbol (single character within single-quotes)</i></b></td></tr>
+    </table><br>
+    Note that an <b>operation</b> can be one of the following:
+    <ul>
+      <li>enum</li>
+      <li>any order</li>
+      <li>option</li>
+      <li>zero or many</li>
+    </ul>
+    Once added, the child node's attributes can be set in the <b><i>Properties Area</i></b>.
+    </div>
+ </body>
+</html>
+==============================================ADD
+
+WRAP=============================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, td {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+    The context menu lets wrap a node or several nodes (using multiple select) with:<br><br>
+    <table>
+      <tr><td>keyword</td><td><b><i>non-terminal symbol which needs itself to be defined</i></b></td></tr>
+      <tr><td>operation</td><td><b><i>non-terminal symbol grouping and operating on further symbols</i></b></td></tr>
+    </table><br>
+    Note that an <b>operation</b> here can be one of the following:
+    <ul>
+      <li>any order</li>
+      <li>option</li>
+      <li>zero or many</li>
+    </ul>
+    Once added, the child node's attributes can be set in the <b><i>Properties Area</i></b>.
+    </div>
+ </body>
+</html>
+=============================================WRAP
+
+COPY=============================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, td {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+    It is possible to reorder and/or increase the number of your created nodes by applying one of the following
+ functionalities:<br><br>
+    <table>
+      <tr><td>copy/paste</td><td><b><i>a single node or several nodes together, with their child nodes</i></b></td></tr>
+      <tr><td>cut/paste</td><td><b><i>a single node or several nodes together, with their child nodes</i></b></td></tr>
+      <tr><td>move up/down</td><td><b><i>allows reordering of siblings</i></b></td></tr>
+      <tr><td>move up/down out</td><td><b><i>allows a child node to move at the level of its parent node</i></b></td></tr>
+      <tr><td>move within next</td><td><b><i>allows a node to move down to the child level of next node</i></b></td></tr>
+    </table><br>
+    </div>
+ </body>
+</html>
+=============================================COPY
+
+FIND=============================================
+The <b>find</b> functionality allows a jump to the next node from your current selected one
+ containing the name you give in the input field.
+ <br><b>Remark:</b> In the <b><i>Source</i></b> tab, the <b>find</b> functionality is also implemented.
+ You access it with <b>Ctrl F</b> key combination. And, with <b>F3</b> you can find next occurrence.
+=============================================FIND
+
+SOURCE===========================================
+Functionality showing the definition of the selected keyword as an AKDL source line. 
+===========================================SOURCE
+
+IGNORED==========================================
+If you wish to see the generated code of your syntax as the latter is not completely designed yet
+(because not all of your keywords are defined), you can turn the undefined keywords to IGNORED. This
+way, the parser will ignore them and parse the rest. If you then have no errors, the java code will
+be generated.<br>
+At any time, you can turn the ignored keywords back to "normal" keywords and define them correctly.
+==========================================IGNORED
+
+BNF==============================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, td {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+    Let's begin with BNF (Backus-Naur Form).
+    BNF is a metalanguage created in the late 50s and early 60s by John Backus, who was one of the
+    pioneers in languages programming technics.<br>
+    Since then, some changes were made and the notation used is rather an EBNF (Extended-BNF) or even an
+    ABNF (Augmented-BNF), where some simplifications were made.<br>
+    It appears, however, none of them noticed there was inconsistencies in the basic notation and, both
+     EBNF and ABNF, perpetuate them.<br>
+    Mainly, we have inherited the following notation:<br><br>
+    <table>
+      <tr><td>()</td><td><b><i>parentheses for grouping</i></b></td><td>1</td></tr>
+      <tr><td>[]</td><td><b><i>grouping of optional items</i></b></td><td>2</td></tr>
+      <tr><td>{}</td><td><b><i>grouping of items appearing multiple times (may be 0)</i></b></td><td>3</td></tr>
+      <tr><td>|</td><td><b><i>alternative ("or" operator)</i></b></td><td>4</td></tr>
+    </table><br>
+    So, a derivation like "x = [ a, b ]" means "x is derived to either nothing or the item &lt;a&gt;
+     followed by the item &lt;b&gt;".<br>
+     We see there, the brackets play a role of grouping items and furthermore make this group optional.
+      We have here a symbol-pair of complexity 2: &lt;grouping&gt; + &lt;option-operator&gt;.<br>
+    The curly braces "{ }" play a similar way with a complexity of 2, whereas the simple parentheses
+     "( )" are just used to group elements (so, complexity 1).<br>
+    The "|" symbol is completely different and plays a role of separator telling "the definition is
+     either what's on its left or on its right".
+    </div>
+ </body>
+</html>
+==============================================BNF
+
+AKDL=============================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, td {
+        border: 1px solid black;
+      }
+      tr.red {font-style: "italic"; color: #e14169;}
+    </style>
+  </head>
+
+  <body>
+    <div>
+    For me, I needed a kind of simplified and enhanced form of EBNF, at the same time. I called it
+     <b><i>seeBNF</i></b>.<br>
+    The proposed simplification leads to symbols of complexity 1 only and always prefixed
+    with operators, if needed. (Another simplification is to forget the comma separators).<br>
+    Thus, the previous table can be replaced by the following:<br><br>
+    <table>
+      <tr><td>()</td><td><b><i>parentheses for grouping</i></b></td><td>1</td></tr>
+      <tr><td>^()</td><td><b><i>grouping of optional items</i></b></td><td>2</td></tr>
+      <tr><td>*()</td><td><b><i>grouping of items appearing multiple times (may be 0)</i></b></td><td>3</td></tr>
+      <tr><td>+()</td><td><b><i>alternative ("or" operator)</i></b></td><td>4</td></tr>
+    </table><br>
+    Of course, like in ABNF, "*"- sign of line 3 can be applied to a single symbol (no need to group a
+    single item). But that can also apply with "^" of line 2. And, of course, "+a" makes no sense
+     since an alternative has always, at least 2 elements. Thus, we'll rather see "+( a b )" instead
+      of "a | b".<br>
+    Well, I confess, in the last example, the original BNF notation may appear easier, but nevertheless
+     inconsistent with the rest.<br>
+    The advantage of the normalized notation proposed here is that we can add some new operators on
+     demand. And, in my case, it's just what I needed (and here is the "enhancement" part). Let's take
+     an example out of the java language to understand what the trouble is and how I solve it: the
+      example of a method definition.<br>
+    A java method, as we know, begins with an optional set of modifiers. They can be one of the
+    following 3: <b><i>public</i></b>, <b><i>protected</i></b>, <b><i>private</i></b>.
+    But, additionally, we may have some more like: <b><i>synchronized</i></b>, <b><i>native</i></b>,
+     <b><i>abstract</i></b>. And a 3rd kind: <b><i>final</i></b>. And a 4th: <b><i>static</i></b>...<br>
+    And, to get it even more complex, all these modifier-sets may be put in any order you like.<br>
+    So, you may have <b><i>public native synchronized void m()</i></b> or <b><i>synchronized native public void m()</i></b>
+     or <b><i>synchronized public native void m()</i></b>, etc.<br>
+    I found it could be great to have an operator meaning "in any order you like". So, that's what I added
+     and I use the "&" symbol for it. So, if you see " &( a b c ) " in your definitions source, that
+     means " abc | acb | bac | bca | cab | cba ".<br>
+    And, of course, you can combine the symbols. For instance: "&( ^a b *c )". There, not only <u>a</u>, <u>b</u> 
+    and <u>c</u> appear in any order you like, but it may happen that <u>a</u> or <u>c</u> doesn't appear at all, or that 
+    <u>c</u> appears more than once. But it is ensured that a appears at most once, <u>b</u> exactly once and <u>c</u> zero
+     or many times, and the whole in any order you like.<br>
+    Thus, we added to the table from above this new line:<br><br>
+    <table>
+      <tr class=red><td>&()</td><td><b><i>items group, in any order you like</i></b></td><td>5</td></tr>
+    </table>
+    </div>
+ </body>
+</html>
+=============================================AKDL
+
+RULES============================================
+The AKDL syntax allows you to define your own syntax in a very flexible way. Nevertheless, you need to
+take some advice in consideration to make the best use of this tool.<br>
+The very first one will be: don't forget out of your grammar definition both a parser and a runtime
+code will be generated. In the following examples, if you define a node <b><i>x</i></b>, <b><i>PRS(</i></b>x<b><i>)</i></b>
+will represent the generated PARSER and <b><i>RT(</i></b>x<b><i>)</i></b> the generated RUNTIME code.<br>
+The parser checks the syntax, creates an instance of the runtime and initializes the latter.
+
+<h3>Example 1</h3>
+Let's say, you define the following line:<br>
+&emsp;<i>escape    = '\\' +( 'd' 's' 'w' 'D' 'S' 'W' 'N' );</i><br><br>
+<b><i>PRS(</i></b>Escape<b><i>)</i></b> by checking this syntax will ensure your source begins with a '\' (back-slash)
+and one of the characters within the parenthesis follows. If so, the <b><i>RT(</i></b>Escape<b><i>)</i></b>
+instance will have its field "ckey" set with that character (without the back-slash).
+
+<h3>Example 2</h3>
+&emsp;<i>alternate = atom '|' atom ;</i><br><br>
+In that case, <b><i>PRS(</i></b>Alternate<b><i>)</i></b> will also correctly check your syntax, but
+your <b><i>RT(</i></b>Alternate<b><i>)</i></b> will only have one field "atom", initialized with the
+last atom (the 2nd will overwrite the first one). What you need at that point is to distinguish them
+and thus get 2 different fields in your runtime code. Something like this:<br>
+&emsp;<i>alternate = atom:atom1 '|' atom:atom2 ;</i><br><br>
+In this case, your <b><i>RT(</i></b>Alternate<b><i>)</i></b> will have two fields "atom1" and "atom2"
+of type Atom.
+
+<h3>Example 3</h3>
+In the following example let's concentrate on "^minus" in the first line and its definition in the
+ second one:<br>
+&emsp;<i>content   = '[' ^minus chain *chain ']' ;</i><br>
+&emsp;<i>minus     = '-' ;</i><br><br>
+"^minus" means keyword "minus" is optional. The line underneath indicates that the"minus" keyword
+is defined as a single character '-'. The Parser will understand that well and will create an empty
+<b><i>RT(</i></b>Minus<b><i>)</i></b> class. An instance of this empty class will appear in
+<b><i>RT(</i></b>Content<b><i>)</i></b> if, and only if, your source contains this '-' sign at that place.<br>
+Now, let's consider "chain *chain". This means: keyword "chain" should appear followed by n further
+"chain" instances (where n can be 0). For those 2 items, "chain" and "*chain", <b><i>RT(</i></b>Content<b><i>)</i></b>
+will have 2 fields: "chain" (of type Chain) and "chains" (of type ArrayList&lt;Chain&gt;).
+
+<h3>Example 4</h3>
+You may have the following definition:<br>
+&emsp;<i>simple    = +( '.' backref );</i><br>
+&emsp;<i>backref   = '\\' NUMERICAL:n ;</i><br><br>
+Here, "simple" is either a char '.' or a keyword "backref", which is then defined in the 2nd line as
+a '\' followed by a Numerical named "n".<br>
+The generated <b><i>RT(</i></b>Simple<b><i>)</i></b> will be a class containing two fields: "ckey"
+(containing or not a '.') and "backref" being null or set to a <b><i>RT(</i></b>Backref<b><i>)</i></b> instance.<br>
+Another way to define that is:<br> 
+&emsp;<i>simple    = +( dot backref );</i><br>
+&emsp;<i>dot       = '.' ;</i><br>
+&emsp;<i>backref   = '\\' NUMERICAL:n ;</i><br><br>
+And here, <b><i>RT(</i></b>Simple<b><i>)</i></b> will be an interface accepting a <b><i>RT(</i></b>SimpleVisitor<b><i>)</i></b>
+which can be visited either by <b><i>RT(</i></b>Dot<b><i>)</i></b> or <b><i>RT(</i></b>Backref<b><i>)</i></b>. This implies
+the concrete instance of type "Simple" that the <b><i>PRS(</i></b>Simple<b><i>)</i></b> will deliver
+will be either a <b><i>RT(</i></b>Dot<b><i>)</i></b> or a <b><i>RT(</i></b>Backref<b><i>)</i></b>.
+
+<h3>Example 5</h3>
+Enum case:<br>
+&emsp;<i>synword = +( ASCII[] Alnum[] Alpha[] Blank[] Cntrl[] Digit[] Graph[] Lower[] Upper[] Print[] Punct[] Space[] XDigit[] );</i><br>
+Pay attention to this notation: all items ending with "[]" are enum elements. "synword" is defined as being one of them.<br>
+<b><u>Note</u></b>: enum elements can have a constant value different from its name like:<br>
+&emsp;<i>sign = +( PLUS['+'] MINUS['-'] );</i><br>or<br>
+&emsp;<i>type = +( INT["int"] LONG["long"] BOOL["boolean"] );</i><br><br>
+In each case, you can refer to the enum element by calling the standard "name()" method or the generated "getVal()". If it is
+differentiated, "name()" will return, for example, "INT" whereas "getVal()" returns "int".
+============================================RULES
+
+WHOLE_SOURCE=====================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .name {font-style: "regular"; color: "#0000e9";}
+      .props {font-style: "italic"; color: "#e14169";}
+    </style>
+  </head>
+
+  <body>
+    %SOURCE%
+ </body>
+</html>
+======================================WHOLE_SOURCE
